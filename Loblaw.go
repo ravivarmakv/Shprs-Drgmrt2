@@ -37,6 +37,7 @@ type UserDetails struct{
 	TotalPoint string `json:"totalPoint"`
 }
 
+
 // to return the verify result
 type VerifyU struct{	
 	Result string `json:"result"`
