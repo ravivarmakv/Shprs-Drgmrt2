@@ -1166,7 +1166,7 @@ func (t *ABC) getLineitemByPRD(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, errors.New("Incorrect number of arguments. Expecting 2 argument to query")
 	}
 
-	product := args[0]
+	Description := args[0]
 	createdBy := args[1]
 	
 	fmt.Println(createdBy)
@@ -1181,7 +1181,7 @@ func (t *ABC) getLineitemByPRD(stub shim.ChaincodeStubInterface, args []string) 
 	rows, err := stub.GetRows("ITEM", columns)
 	
 	if err != nil {
-		jsonResp := "{\"Error\":\"Failed to get the data for the product " + product + "\"}"
+		jsonResp := "{\"Error\":\"Failed to get the data for the Description " + Description + "\"}"
 		return nil, errors.New(jsonResp)
 	}
 
@@ -1193,7 +1193,7 @@ func (t *ABC) getLineitemByPRD(stub shim.ChaincodeStubInterface, args []string) 
 	for row := range rows {		
 		fetchedLineItemPRD := row.Columns[2].GetString_()
 		
-		if fetchedLineItemPRD == product{
+		if fetchedLineItemPRD == Description{
 			
 			
 			itemdetails.LineItemId = row.Columns[0].GetString_()
