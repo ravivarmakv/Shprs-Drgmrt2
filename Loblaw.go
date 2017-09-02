@@ -1159,6 +1159,80 @@ func (t *ABC) getLineitemByStatus(stub shim.ChaincodeStubInterface, args []strin
 	return mapB, nil
 }
 
+//get getLineitemByPRD(irrespective of organization)
+func (t *ABC) getLineitemByPRD(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	if len(args) != 2 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 2 argument to query")
+	}
+
+	product := args[0]
+	createdBy := args[1]
+	
+	fmt.Println(createdBy)
+	
+	
+	
+	
+	// Get the row pertaining to this ASN
+	var columns []shim.Column
+	
+
+	rows, err := stub.GetRows("ITEM", columns)
+	
+	if err != nil {
+		jsonResp := "{\"Error\":\"Failed to get the data for the product " + product + "\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	
+	var itemArray ItemArray
+	var itemdetails Item
+	itemArray.ItemDetail = make([]Item, 0)
+	
+	for row := range rows {		
+		fetchedLineItemPRD := row.Columns[2].GetString_()
+		
+		if fetchedLineItemPRD == product{
+			
+			
+			itemdetails.LineItemId = row.Columns[0].GetString_()
+			itemdetails.ItemId = row.Columns[1].GetString_()
+			itemdetails.Description = row.Columns[2].GetString_()
+			itemdetails.Qty = row.Columns[3].GetString_()
+			itemdetails.Unit = row.Columns[4].GetString_()
+			itemdetails.Status = row.Columns[5].GetString_()
+			itemdetails.QtyReceivedAtMedturn = row.Columns[6].GetString_()
+			itemdetails.QtyReceivedAtWarehouse = row.Columns[7].GetString_()
+			itemdetails.QtyReceivedAtDisposal = row.Columns[8].GetString_()
+			itemdetails.QtyReceivedAtManufacturer = row.Columns[9].GetString_()
+			itemdetails.CreateTs = row.Columns[10].GetString_()
+			itemdetails.UpdateTs = row.Columns[11].GetString_()
+			itemdetails.UpdatedBy = row.Columns[12].GetString_()
+			itemdetails.Remarks = row.Columns[13].GetString_()
+			itemdetails.BoxBarcodeNumber = row.Columns[14].GetString_()
+			itemdetails.DebitMemo = row.Columns[15].GetString_()
+			itemdetails.LotNumber = row.Columns[16].GetString_()
+			itemdetails.Dc = row.Columns[17].GetString_()
+			itemdetails.Ndc = row.Columns[18].GetString_()
+			itemdetails.ExpDate = row.Columns[19].GetString_()
+			itemdetails.PurchageOrderNumber = row.Columns[20].GetString_()
+			itemdetails.AsnNumber = row.Columns[25].GetString_()
+			itemdetails.MrrRequestNumber = row.Columns[26].GetString_()
+			
+			itemArray.ItemDetail = append(itemArray.ItemDetail, itemdetails)
+		}
+	}
+		
+	
+    mapB, _ := json.Marshal(itemArray)
+    fmt.Println(string(mapB))
+	
+	return mapB, nil
+}
+
+
+
 
 //get getLineitemCountByStatus(irrespective of organization)
 func (t *ABC) getLineitemCountByStatus(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
@@ -1603,6 +1677,9 @@ func (t *ABC) Query(stub shim.ChaincodeStubInterface, function string, args []st
 	}else if function == "getLineitemByStatus" { 
 		t := ABC{}
 		return t.getLineitemByStatus(stub, args)
+	}else if function == "getLineitemByPRD" { 
+		t := ABC{}
+		return t.getLineitemByPRD(stub, args)
 	}else if function == "getLineitemCountByStatus" { 
 		t := ABC{}
 		return t.getLineitemCountByStatus(stub, args)
