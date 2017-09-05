@@ -190,6 +190,7 @@ func (t *ABC) Init(stub shim.ChaincodeStubInterface, function string, args []str
 		&shim.ColumnDefinition{Name: "shUniqueid", Type: shim.ColumnDefinition_STRING, Key: false},
 		&shim.ColumnDefinition{Name: "asnNumber", Type: shim.ColumnDefinition_STRING, Key: false},
 		&shim.ColumnDefinition{Name: "mrrRequestNumber", Type: shim.ColumnDefinition_STRING, Key: false},
+		&shim.ColumnDefinition{Name: "medGrp", Type: shim.ColumnDefinition_STRING, Key: false},
 	})
 	if err != nil {
 		return nil, errors.New("Failed creating ApplicationTable.")
@@ -408,6 +409,7 @@ if len(args) < 8 {
 			shUniqueid := "NA"
 			asnNumber =	asnNumber
 			mrrRequestNumber := "NA"
+			medGrp := safeValue(itemArray[row].MedGrp)
 					
 					
 			// Insert a row 
@@ -440,6 +442,7 @@ if len(args) < 8 {
 				&shim.Column{Value: &shim.Column_String_{String_: shUniqueid}},
 				&shim.Column{Value: &shim.Column_String_{String_: asnNumber}},
 				&shim.Column{Value: &shim.Column_String_{String_: mrrRequestNumber}},
+				&shim.Column{Value: &shim.Column_String_{String_: medGrp}},
 			}})
 
 		if err != nil {
@@ -560,6 +563,7 @@ func (t *ABC) updateLineItem(stub shim.ChaincodeStubInterface, args []string) ([
 			shUniqueid := row.Columns[24].GetString_()
 			asnNumber := row.Columns[25].GetString_()
 			mrrRequestNumber := row.Columns[26].GetString_()
+			medGrp := row.Columns[27].GetString_()
 					
 					
 					
@@ -593,6 +597,7 @@ func (t *ABC) updateLineItem(stub shim.ChaincodeStubInterface, args []string) ([
 				&shim.Column{Value: &shim.Column_String_{String_: shUniqueid}},
 				&shim.Column{Value: &shim.Column_String_{String_: asnNumber}},
 				&shim.Column{Value: &shim.Column_String_{String_: mrrRequestNumber}},
+				&shim.Column{Value: &shim.Column_String_{String_: medGrp}},
 			}})
 
 		if err != nil {
@@ -823,7 +828,8 @@ func (t *ABC) updateASN(stub shim.ChaincodeStubInterface, args []string) ([]byte
 				grmUniqueid := row.Columns[23].GetString_()
 				shUniqueid := row.Columns[24].GetString_()
 				asnNumber = row.Columns[25].GetString_()
-				mrrRequestNumber := row.Columns[26].GetString_()	
+				mrrRequestNumber := row.Columns[26].GetString_()
+				medGrp := row.Columns[27].GetString_()
 					
 					
 				// Insert a row 
@@ -856,6 +862,7 @@ func (t *ABC) updateASN(stub shim.ChaincodeStubInterface, args []string) ([]byte
 					&shim.Column{Value: &shim.Column_String_{String_: shUniqueid}},
 					&shim.Column{Value: &shim.Column_String_{String_: asnNumber}},
 					&shim.Column{Value: &shim.Column_String_{String_: mrrRequestNumber}},
+					&shim.Column{Value: &shim.Column_String_{String_: medGrp}},
 				}})
 
 			if err != nil {
@@ -963,6 +970,7 @@ func (t *ABC) getASNDetails(stub shim.ChaincodeStubInterface, args []string) ([]
 		itemdetails.PurchageOrderNumber = row.Columns[20].GetString_()
 		itemdetails.AsnNumber = row.Columns[25].GetString_()
 		itemdetails.MrrRequestNumber = row.Columns[26].GetString_()
+		itemdetails.MedGrp = row.Columns[27].GetString_()
 		
 		asnitem.ItemDetail = append(asnitem.ItemDetail, itemdetails)		
 	}
@@ -1080,6 +1088,7 @@ func (t *ABC) getLineitem(stub shim.ChaincodeStubInterface, args []string) ([]by
 		itemdetails.PurchageOrderNumber = row.Columns[20].GetString_()
 		itemdetails.AsnNumber = row.Columns[25].GetString_()
 		itemdetails.MrrRequestNumber = row.Columns[26].GetString_()
+		itemdetails.MedGrp = row.Columns[27].GetString_()
 	
 	
     mapB, _ := json.Marshal(itemdetails)
@@ -1148,6 +1157,7 @@ func (t *ABC) getLineitemByStatus(stub shim.ChaincodeStubInterface, args []strin
 			itemdetails.PurchageOrderNumber = row.Columns[20].GetString_()
 			itemdetails.AsnNumber = row.Columns[25].GetString_()
 			itemdetails.MrrRequestNumber = row.Columns[26].GetString_()
+			itemdetails.MedGrp = row.Columns[27].GetString_()
 			
 			itemArray.ItemDetail = append(itemArray.ItemDetail, itemdetails)
 		}
@@ -1220,6 +1230,7 @@ func (t *ABC) getLineitemByPRD(stub shim.ChaincodeStubInterface, args []string) 
 			itemdetails.PurchageOrderNumber = row.Columns[20].GetString_()
 			itemdetails.AsnNumber = row.Columns[25].GetString_()
 			itemdetails.MrrRequestNumber = row.Columns[26].GetString_()
+			itemdetails.MedGrp = row.Columns[27].GetString_()
 			
 			itemArray.ItemDetail = append(itemArray.ItemDetail, itemdetails)
 		}
@@ -1482,6 +1493,7 @@ if len(args) < 8 {
 				shUniqueid := row.Columns[24].GetString_()
 				asnNumber := row.Columns[25].GetString_()
 				mrrRequestNumber := requestNumber	
+				medGrp := row.Columns[27].GetString_()
 					
 					
 				// Insert a row 
@@ -1514,6 +1526,7 @@ if len(args) < 8 {
 					&shim.Column{Value: &shim.Column_String_{String_: shUniqueid}},
 					&shim.Column{Value: &shim.Column_String_{String_: asnNumber}},
 					&shim.Column{Value: &shim.Column_String_{String_: mrrRequestNumber}},
+					&shim.Column{Value: &shim.Column_String_{String_: medGrp}},
 				}})
 
 			if err != nil {
@@ -1625,6 +1638,7 @@ func (t *ABC) getMRRDetails(stub shim.ChaincodeStubInterface, args []string) ([]
 		itemdetails.PurchageOrderNumber = row.Columns[20].GetString_()
 		itemdetails.AsnNumber = row.Columns[25].GetString_()
 		itemdetails.MrrRequestNumber = row.Columns[26].GetString_()
+		itemdetails.MedGrp = row.Columns[27].GetString_()
 		
 		mrritem.ItemDetail = append(mrritem.ItemDetail, itemdetails)		
 	}
