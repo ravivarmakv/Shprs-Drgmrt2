@@ -58,6 +58,7 @@ type Item struct{
 	PurchageOrderNumber string `json:"purchageOrderNumber"`
 	AsnNumber string `json:"asnNumber"`
 	MrrRequestNumber string `json:"mrrRequestNumber"`
+	MedGrp string `json:"medGrp"`
 }
 
 
